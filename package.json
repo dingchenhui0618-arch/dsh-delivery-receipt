@@ -1,0 +1,71 @@
+{
+  "name": "dsh-delivery-receipt",
+  "version": "0.1.0",
+  "description": "可公开的交付回执（DeepSeek Harness 插件）：项目收尾时把分支与 commit、测试与构建结果、交付物尺寸与 sha256、密钥扫描结论汇成一张自带「已验证 / 仅本地 / 未验证」三区的回执，没有证据的板块留空而不是补话。 / Publishable delivery receipt for DeepSeek Harness: one page that sorts every claim into verified / local-only / unverified, and leaves unsupported sections empty instead of filling them.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "scripts/receipt.mjs",
+    "screenshots.json",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "receipt": "node scripts/receipt.mjs",
+    "prepack": "node scripts/build.mjs"
+  },
+  "bin": {
+    "dsh-delivery-receipt": "scripts/receipt.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-layout"
+      ],
+      "platform": "web"
+    }
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "receipt",
+    "delivery",
+    "handoff",
+    "evidence",
+    "ship",
+    "release",
+    "report"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dingchenhui0618-arch/dsh-delivery-receipt.git"
+  },
+  "homepage": "https://github.com/dingchenhui0618-arch/dsh-delivery-receipt#readme",
+  "bugs": {
+    "url": "https://github.com/dingchenhui0618-arch/dsh-delivery-receipt/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

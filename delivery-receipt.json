@@ -1,0 +1,23 @@
+{
+  "project": "dsh-delivery-receipt",
+  "tests": [
+    { "name": "单元测试（node --test）", "command": "node --test test/*.test.mjs" }
+  ],
+  "builds": [
+    { "name": "零依赖构建（校验 lib/ 与 src/ 一致）", "command": "node scripts/build.mjs" }
+  ],
+  "artifacts": [
+    "docs/*.png"
+  ],
+  "scan": {
+    "ignore": [
+      "docs/receipt-example.md"
+    ]
+  },
+  "claims": [
+    {
+      "label": "尚未在真实 DSH 宿主里安装验证",
+      "value": "本仓库只跑了 node --test 与 CLI；插件的 host/client 半区没有在运行中的 DSH 里加载过"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+node_modules/
+*.log
+
+# 本地验证用的一次性产物
+_verify/
+*.tmp
+.tmp/
