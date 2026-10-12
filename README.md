@@ -73,6 +73,9 @@ node scripts/receipt.mjs --no-run            # 只采集，不执行命令
 
 ![回执页：三区并列，每条声明都带证据行](docs/screenshot-1.png)
 
+> 图是**快照**：截图文件自身的 sha256 每拍一次都会变，所以图里「交付物」那一行永远比当前文件慢一代。
+> 权威数据看 [docs/receipt-example.md](docs/receipt-example.md)（它记录的是它自己那一刻的仓库状态，含生成时间与 commit）。
+
 ## HTTP 接口
 
 | 方法 | 路径 | 说明 |
