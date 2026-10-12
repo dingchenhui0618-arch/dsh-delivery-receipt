@@ -10,9 +10,7 @@
     "docs/*.png"
   ],
   "scan": {
-    "ignore": [
-      "docs/receipt-example.md"
-    ]
+    "allowMarker": "delivery-receipt:allow"
   },
   "claims": [
     {

@@ -79,9 +79,9 @@ test('redactText 隐去各类凭据，普通文本不动', () => {
   assert.match(redactText('token=' + gh), /<已隐去:github-token>/)
   assert.doesNotMatch(redactText('token=' + gh), /ghp_/)
   assert.match(redactText(sk), /<已隐去:openai-style-key>/)
-  assert.match(redactText('-----BEGIN RSA PRIVATE KEY-----'), /<已隐去:private-key-block>/)
+  assert.match(redactText('-----BEGIN RSA PRIVATE KEY-----'), /<已隐去:private-key-block>/) // delivery-receipt:allow
   assert.match(redactText('Authorization: Bearer ' + 'x'.repeat(40)), /<已隐去:bearer-header>/)
-  assert.match(redactText('password = "hunter2hunter2"'), /<已隐去:assigned-secret>/)
+  assert.match(redactText('password = "hunter2hunter2"'), /<已隐去:assigned-secret>/) // delivery-receipt:allow
   assert.equal(redactText('普通的提交信息，没有凭据'), '普通的提交信息，没有凭据')
 })
 
@@ -165,6 +165,33 @@ test('scanForSecrets 跳过二进制、超大文件与被忽略的前缀', () =>
   assert.equal(result.skipped.ignored, 1)
   assert.equal(result.filesScanned, 0)
   assert.equal(result.clean, true)
+})
+
+test('scanForSecrets 逐行豁免标记只放行那一行，并把豁免行数计入 skipped', () => {
+  const marker = 'delivery-receipt:allow'
+  const dir = writeFiles(makeDir(), {
+    'fixtures.js': 'const a = 1\nconst k = "-----BEGIN RSA PRIVATE KEY' + '-----" // ' + marker + '\n',
+    'real.js': 'const k = "-----BEGIN RSA PRIVATE KEY' + '-----"\n',
+  })
+  const result = scanForSecrets(dir, { files: ['fixtures.js', 'real.js'] })
+  assert.equal(result.skipped.allowlisted, 1)
+  assert.equal(result.hits.length, 1, '同一个文件里没打标记的行照旧命中')
+  assert.equal(result.hits[0].file, 'real.js')
+  assert.equal(result.hits[0].line, 1)
+  assert.equal(result.clean, false)
+})
+
+test('scanForSecrets 的豁免标记可配置，且只统计"本该报警"的行', () => {
+  const dir = writeFiles(makeDir(), {
+    'a.js': 'const k = "AKIA' + 'IOSFODNN7EXAMPLE" // LGTM\n',
+    'b.js': 'const note = "LGTM" // 纯粹是这句话，没有凭据\n',
+  })
+  const withDefault = scanForSecrets(dir, { files: ['a.js', 'b.js'] })
+  assert.equal(withDefault.hits.length, 1)
+  assert.equal(withDefault.skipped.allowlisted, 0)
+  const withCustom = scanForSecrets(dir, { files: ['a.js', 'b.js'], allowMarker: '// LGTM' })
+  assert.equal(withCustom.hits.length, 0)
+  assert.equal(withCustom.skipped.allowlisted, 1, 'b.js 只是出现了标记字样，不该计入豁免')
 })
 
 test('gitFacts：不是仓库时明确返回 isRepo=false', () => {

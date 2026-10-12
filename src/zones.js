@@ -139,7 +139,9 @@ export function gitClaims(git) {
     id: nextId('git'),
     section: 'git',
     label: '未提交改动',
-    value: git.clean ? '工作区干净' : git.dirty.length + ' 个文件',
+    value: git.clean
+      ? '工作区干净'
+      : git.dirty.length + ' 个文件' + (git.untracked.length > 0 ? '（其中 ' + git.untracked.length + ' 个未跟踪）' : ''),
     tone: git.clean ? 'ok' : 'warn',
     // 工作区脏这件事**天生只能在本机成立**：它是"尚未进入版本库"的定义。
     evidence: { kind: 'git', ref: 'worktree', resolved: true, local: !git.clean },
@@ -262,6 +264,7 @@ export function scanClaims(scan) {
   const skipped = scan.skipped || {}
   const skipText = '跳过：二进制 ' + (skipped.binary || 0) + ' · 超大 ' + (skipped.oversized || 0)
     + ' · 忽略 ' + (skipped.ignored || 0) + ' · 读不到 ' + (skipped.unreadable || 0)
+    + ' · 按标记豁免 ' + (skipped.allowlisted || 0) + ' 行'
   out.push({
     id: nextId('scan'),
     section: 'scan',
