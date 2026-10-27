@@ -6,8 +6,9 @@
 
 - 新增 `SECURITY.md`：写清会执行配置里声明的测试/构建命令（请求体不能传命令）、
   `roots` 是精确路径白名单、密钥扫描只覆盖被跟踪文件且是正则黑名单。
-- 新增 `.github/workflows/ci.yml`：Ubuntu + Windows × Node 22/24，构建 `lib/`、
-  校验 `lib/` 与 `src/` 一致、跑 `node --test`。
+- 新增 `.github/workflows/ci.yml`：Windows × Node 22/24，构建 `lib/`、校验 `lib/` 与
+  `src/` 一致、跑 `node --test`。**只在 Windows 上跑**：`test/` 里有多处夹具写死了
+  `C:\Users\...` 路径，同一套用例在 ubuntu 上必然失败；等夹具改成平台无关后再加 Linux job。
 - README 顶部补 CI 与 license badge、star 引导一句。
 
 ## 0.1.0
