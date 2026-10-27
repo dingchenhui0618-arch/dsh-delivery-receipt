@@ -1,8 +1,13 @@
 # dsh-delivery-receipt（交付回执）
 
+[![CI](https://github.com/dingchenhui0618-arch/dsh-delivery-receipt/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dingchenhui0618-arch/dsh-delivery-receipt/actions/workflows/ci.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 给 DeepSeek Harness 的**交付回执**插件：项目收尾时按一下，把「分支与 commit、测试与构建结果、
 关键截图尺寸与 sha256、密钥扫描结论」汇成一张可以拿出去给人看的页面 —— 并且把每一条声明
 **硬性**分进「已验证 / 仅本地 / 未验证」三区。**没有证据的板块留空，不补话。**
+
+> 用着还行的话，点个 ⭐ 就够了——插件市场的「搜插件」按 GitHub star 排序，star 是这个插件能被人翻到的唯一杠杆。
 
 ## 为什么要有它
 
